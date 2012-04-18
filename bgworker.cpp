@@ -85,7 +85,7 @@ public:
     template<typename Function, typename Handler>
     void async_run(Function function, Handler handler)
     {
-        m_work_demuxer.post(run_proc<Function, Handler>(m_demuxer, function,
+        m_work_demuxer.post(run_proc<Function, Handler>(demuxer(), function,
             handler));
         if(!m_work_thread)
         {
