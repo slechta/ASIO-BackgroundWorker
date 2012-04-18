@@ -17,7 +17,7 @@ bgworker: $(OBJ)
 	$(CCC) -c $(CCCFLAGS) $< -o $@
 	
 clean::
-	rm -f bgwroker.o
+	rm -f bgworker.o
 	rm -f bgworker
 	
 

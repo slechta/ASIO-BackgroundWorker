@@ -4,6 +4,13 @@
 #include <boost/date_time/posix_time/posix_time.hpp>
 #include <boost/thread.hpp>
 
+// ASIO background thread
+//-----------------------------------------------------------------------------
+// Thanks to Vaclav Vesely and Christopher Kohlhoff
+// http://boost.2283326.n4.nabble.com/asio-How-to-write-custom-async-event-provider-td2604301.html
+// ----------------------------------------------------------------------------
+// This is modified version to compile with GCC 4.6 -fpermissive
+// Pavel Slechta <slechta at email dot cz>
 //-----------------------------------------------------------------------------
 
 template<typename Demuxer>
@@ -136,12 +143,16 @@ void wait_finished()
 int main(int argc, char *argv[])
 {
     boost::asio::io_service ios;
+    
     background_worker<boost::asio::io_service> bg_thread(ios);
-    bg_thread.async_run(boost::bind(wait, 1), wait_finished);
-    bg_thread.async_run(boost::bind(wait, 1), wait_finished);
+    background_worker<boost::asio::io_service> bg_thread2(ios);
+    
+    bg_thread.async_run(boost::bind(wait, 5), wait_finished);
+    bg_thread2.async_run(boost::bind(wait, 5), wait_finished);
     ios.run();
 
-    bg_thread.async_run(boost::bind(wait, 1), wait_finished);
+    bg_thread.async_run(boost::bind(wait, 10), wait_finished);
+    
     ios.reset();
     ios.run();
 } 
